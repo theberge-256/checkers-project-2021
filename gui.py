@@ -15,15 +15,15 @@ class CheckersApp(tk.Frame):
         self.render()
     
     def render(self):
-        self.grid() # unusual freeze here
-        # self.build_gui()
+        self.grid()
+        self.build_gui()
         self.build_board()
 
     def build_gui(self):
         """
         This will have checkers counts, and any sort of stats plus labels like Player 1 and 2
         """
-        return
+        pass
     
     def build_board(self):
         """
@@ -32,6 +32,9 @@ class CheckersApp(tk.Frame):
         for x in range(8):
             for y in range(8):
                 self.build_cell(x, y)
+        
+        self.update_board()
+
         return
 
     def build_cell(self, x, y):
@@ -41,15 +44,26 @@ class CheckersApp(tk.Frame):
             color = 'white'
         
         cell = tk.Button(self,
-            text=color,
+            highlightbackground=color,
             bg=color,
-            width=10)
+            # text='%d,%d' % (x, y),
+            width=6,
+            command = lambda :self.button_clicked(x, y),
+            height=3)
 
         cell.grid(row=self.padding + y,
-                  column=self.padding + x,
-                  columnspan=5,
-                  sticky=tk.NSEW)
+                  column=self.padding + x)
+   
+    def update_board(self):
+        """
+        Goes through game board data and updates the gui respectively
+        """
+        pass
 
+
+
+    def button_clicked(self, x, y):
+        print('Clicked piece %d, %d' % (x, y))
 
 
 
