@@ -28,18 +28,16 @@ class CheckersGui(tkinter.Frame):
 
         
     def create_grid(self):
-        #this creates a list within lists, and assigns an area with a number. 
-        #The next step is too assign the buttons to the grid        
         grid = []
-
+        #FOR SOME REASON, THE GRID ENDS AT 07 AND STARTS THE NEXT ROW AT 10. IT SKIPS ALL 8 and 9s.
         for row in range(8):
+
             grid.append([])
 
             for column in range(8):
                 grid_button = tkinter.Button(self, text= str(row) + str(column), command = lambda r=row, c=column :self.button_clicked(r, c))
                 grid_button.grid(row=row, column=column)
                 grid[row].append(grid_button)
-        
         self.button_grid = grid
         
     def replace_piece(self):
@@ -50,10 +48,10 @@ class CheckersGui(tkinter.Frame):
         pass
 
     def button_clicked(self, row, column):
-        print("Hello world!" + str(row) + str(column))
+        print(str(row) + str(column))
         button = self.button_grid[row][column]
         button['fg'] = 'red'
-
+        pass
 root = tkinter.Tk()
 root.title("Checkers Application")
 
