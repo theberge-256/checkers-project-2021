@@ -7,4 +7,13 @@ class CheckersLogic:
         This will some how be passed to the gui class in the future
     """
     def __init__(self):
-        print('Hello')
+        self.board = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+        ]
