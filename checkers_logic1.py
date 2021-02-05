@@ -4,17 +4,27 @@ class CheckersPiece:
     """
     def __init__(self, x, y, board, team):
         self.board = board
-        self.team = team # "white" or "black"
+        self.team = team # "white" or "red"
         self.x = x
         self.y = y
+        if board[x][y] == 0:
+            board[x][y] = self
+
         self.is_king = False
+
+    def move_to(self, x, y):
+        self.board[self.x][self.y] = 0
+
+        self.x = x
+        self.y = y
+        self.board[self.x][self.y] = self
+
 
     def allowed_moves(self):
         """
             Gets the moves that are permitted from the piece
             TODO -> if there is a player where it can move, but not a player after,
             allow "jumping" over players.
-            TODO -> allow backwards movement by kings
 
             X = self player
             Y = other players
@@ -25,7 +35,7 @@ class CheckersPiece:
             -------------------
                |   | X |   |
             -------------------
-               | Z |   | Y |   
+               | Z |   | Y |   < jump thing is TODO
             -------------------
                |   |   |   | Z 
 
@@ -35,7 +45,7 @@ class CheckersPiece:
         x = self.x
         y = self.y
         # If its white, it moves from y = 0, to y = 8
-        # If its black, it moves from y = 8 to y = 0
+        # If its red, it moves from y = 8 to y = 0
         direction = -1
         if self.team == 'white':
             direction = 1
@@ -74,3 +84,18 @@ class CheckersLogic:
                 arr.append(0)
 
             self.board.append(arr)
+
+        self.setup()
+
+    def setup(self):
+        for x in range(8):
+            for y in range(8):
+                if (x + y) % 2 == 1:
+                    if y < 3:
+                        self.board[x][y] = CheckersPiece(x, y, self.board, 'white')
+                        continue
+                    if y > 4:
+                        self.board[x][y] = CheckersPiece(x, y, self.board, 'red')
+                        continue
+
+                self.board[x][y] = 0
