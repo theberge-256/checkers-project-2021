@@ -7,13 +7,14 @@ class CheckersLogic:
         This will some how be passed to the gui class in the future
     """
     def __init__(self):
-        self.board = [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-        ]
+        # Maybe something like:
+        #   -1 = no piece
+        #   0  = black piece
+        #   1  = white piece
+        self.board = []
+        for x in range(8):
+            arr = []
+            for y in range(8):
+                arr.append(-1)
+
+            self.board.append(arr)
