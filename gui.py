@@ -11,8 +11,13 @@ class CheckersApp(tk.Frame):
 
         # self.controller_thing = controller_thing
         self.padding = 3
-
+        self.img = tk.PhotoImage(file = "checker.gif")
+        self.img2 = tk.PhotoImage(file = "redchecker.gif")
+        #self.img2 = self.img2.zoom(3)
         self.render()
+
+
+
     
     def render(self):
         self.grid()
@@ -38,21 +43,36 @@ class CheckersApp(tk.Frame):
         return
 
     def build_cell(self, x, y):
-        # determine color by x and y
         color = 'black'
-        if (x + y) % 2 == 1:
+        if (x + y) % 2 + 1 == 1:
             color = 'white'
-        
+
+
         cell = tk.Button(self,
             highlightbackground=color,
             bg=color,
-            # text='%d,%d' % (x, y),
             width=6,
             command = lambda :self.button_clicked(x, y),
             height=3)
+        
+        if x % 2 == ((y)%2):
+           if y < 3:
+                cell = tk.Button(self,
+                    width=50, 
+                    image = self.img, 
+                    command = lambda :self.button_clicked(x, y),
+                    height=50)
+           
+           elif y > 4:
+                cell = tk.Button(self,
+                    width=50, 
+                    image = self.img2, 
+                    command = lambda :self.button_clicked(x, y),
+                    height=50)
 
         cell.grid(row=self.padding + y,
                   column=self.padding + x)
+
    
     def update_board(self):
         """
