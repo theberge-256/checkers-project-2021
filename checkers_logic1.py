@@ -4,13 +4,19 @@ class CheckersPiece:
     """
     def __init__(self, x, y, board, team):
         self.board = board
-        self.team = team # "white" or "red"
+        self.team = team # "red" or "black"
         self.x = x
         self.y = y
+        
         if board[x][y] == 0:
             board[x][y] = self
 
         self.is_king = False
+        self.is_dead = False
+    
+    def destroy(self):
+        self.board[self.x][self.y] = 0
+        self.is_dead = False
 
     def move_to(self, x, y):
         self.board[self.x][self.y] = 0
@@ -38,37 +44,53 @@ class CheckersPiece:
                | Z |   | Y |   < jump thing is TODO
             -------------------
                |   |   |   | Z 
-
         """
-
-        possible_moves = [] # stored as an array of [x, y]s
+        # stored as an array of {x, y, destroyedPieces:[{x, y}]}s
+        possible_moves = []
+     
         x = self.x
         y = self.y
-        # If its white, it moves from y = 0, to y = 8
-        # If its red, it moves from y = 8 to y = 0
+        # If its black, it moves from y = 0, to y = 8
+        # If its black, it moves from y = 8 to y = 0
         direction = -1
-        if self.team == 'white':
+        if self.team == 'black':
             direction = 1
 
         # if there is no player on right, its direction
         if self.board[x + 1][y + direction] == 0:
-            possible_moves.append([x + 1, y + direction])
+            possible_moves.append({
+                "x": x + 1,
+                "y": y + direction,
+                "destroyedPieces": [],
+            })
         # if there is no player on left, its direction
         if self.board[x - 1][y + direction] == 0:
-            possible_moves.append([x - 1, y + direction])
+            possible_moves.append({
+                "x": x - 1,
+                "y": y + direction,
+                "destroyedPieces": [],
+            })
         if self.is_king:
             # if there is no player on right, opposite its direction, and is a king
             if self.board[x + 1][y - direction] == 0:
-                possible_moves.append([x + 1, y - direction])
+                possible_moves.append({
+                    "x": x + 1,
+                    "y": y - direction,
+                    "destroyedPieces": [],
+                })
 
             # if there is no player on left,  opposite its direction, and is a kings
             if self.board[x - 1][y - direction] == 0:
-                possible_moves.append([x - 1, y - direction])
+                possible_moves.append({
+                    "x": x - 1,
+                    "y": y - direction,
+                    "destroyedPieces": [],
+                })
         
         return possible_moves
 
     
-class CheckersLogic:
+class CheckersGame:
     """
         Class with much of the logic, which will be used to store pieces
          and know the rule of the game
@@ -76,7 +98,7 @@ class CheckersLogic:
         This will some how be passed to the gui class in the future
     """
     def __init__(self):
-        #   when 0, there is no piece
+        # when 0, there is no piece
         self.board = []
         for x in range(8):
             arr = []
@@ -92,10 +114,10 @@ class CheckersLogic:
             for y in range(8):
                 if (x + y) % 2 == 1:
                     if y < 3:
-                        self.board[x][y] = CheckersPiece(x, y, self.board, 'white')
+                        self.board[x][y] = CheckersPiece(x, y, self.board, 'black')
                         continue
                     if y > 4:
-                        self.board[x][y] = CheckersPiece(x, y, self.board, 'red')
+                        self.board[x][y] = CheckersPiece(x, y, self.board, 'black')
                         continue
 
                 self.board[x][y] = 0
