@@ -49,24 +49,25 @@ class CheckersApp(tk.Frame):
 
     def build_cell(self, x, y):
         color = 'black'
-        if (x + y) % 2 +1 == 1:
+        cell = tk.Button(self,
+                    highlightbackground=color,
+                    bg=color,
+                    width=6,
+                    height=3)
+        if (x + y) % 2 + 1 == 1:
             color = 'red'
+            cell = tk.Button(self,
+                    highlightbackground=color,
+                    bg=color,
+                    width=6,
+                    command = lambda x=x, y=y :self.grid_clicked(x, y),
+                    height=3)
         self.piecelist = []
         self.piecelist.append("x")
         self.piecelist.append('y')
         self.locationlist = []
         self.locationlist.append("x")
         self.locationlist.append("y")
-
-
-
-
-        cell = tk.Button(self,
-            highlightbackground=color,
-            bg=color,
-            width=6,
-            command = lambda x=x, y=y :self.grid_clicked(x, y),
-            height=3)
 
 
         if x % 2 == ((y)%2):
@@ -83,7 +84,7 @@ class CheckersApp(tk.Frame):
                     image = self.img2, 
                     command = lambda x=x, y=y :self.button_clicked(x, y),
                     height=50)
-        
+    
         cell.grid(row=self.padding + y,
                   column=self.padding + x)
         self.board=[]
@@ -101,7 +102,6 @@ class CheckersApp(tk.Frame):
         del(self.locationlist[0])
         self.locationlist.append(x)
         self.locationlist.append(y)
-        print(self.locationlist)
         if self.counter > 0:
             self.counter +=1
         
@@ -126,12 +126,11 @@ class CheckersApp(tk.Frame):
         print('Clicked piece %d, %d' % (x, y))
         if self.counter == 0:
             self.counter +=1
-            print(self.counter)
+
         del(self.piecelist[0])
         del(self.piecelist[0])
         self.piecelist.append(x)
         self.piecelist.append(y)
-        print(self.piecelist)
 
 root = tk.Tk()
 root.title("Checkers Application")
