@@ -154,7 +154,7 @@ class CheckersPiece:
         return possible_moves
 
     
-class CheckersGame:
+class CheckersLogic:
     """
         Class with much of the logic, which will be used to store pieces
          and know the rule of the game
