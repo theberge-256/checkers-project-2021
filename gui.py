@@ -155,19 +155,18 @@ class CheckersApp(tk.Frame):
         self.piecelist.append(x)
         self.piecelist.append(y)
     def update_board(self):
+        """
+            U
+        """
+
         pass
+
     def move_piece(self, x, y):
         pass
 
 
 
-root = tk.Tk()
-root.title("Checkers Application")
 
-# app = CheckersApp(root, controller_thing)
-app = CheckersApp(root, False)
-
-root.mainloop()
 
 #CHANGES MADE:
 #PIECES CAN NO LONGER MOVE TO BLACK SQUARES
