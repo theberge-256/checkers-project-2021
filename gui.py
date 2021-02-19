@@ -182,13 +182,13 @@ class CheckersApp(tk.Frame):
         pass
     def move_piece(self, x, y):
         pass
-root = tk.Tk()
-root.title("Checkers Application")
+#root = tk.Tk()
+#root.title("Checkers Application")
 
 # app = CheckersApp(root, controller_thing)
-app = CheckersApp(root, False)
+#app = CheckersApp(root, False)
 
-root.mainloop()
+#root.mainloop()
 
 #CHANGES MADE:
 #PIECES CAN NO LONGER MOVE TO BLACK SQUARES
