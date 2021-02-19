@@ -15,10 +15,12 @@ class CheckersApp(tk.Frame):
         self.img = tk.PhotoImage(file = "Red Checker.png")
         self.img2 = tk.PhotoImage(file = "Black Checker.png")
         #self.img2 = self.img2.zoom(3)
-        self.render()
-        self.counter = 0
         self.round = 1
         self.loop = 0
+        self.red = 1
+        self.black = 0
+        self.render()
+        self.build_gui()
         
 
 
@@ -26,14 +28,19 @@ class CheckersApp(tk.Frame):
     
     def render(self):
         self.grid()
-        self.build_gui()
         self.build_board()
-
     def build_gui(self):
-        """
-        This will have checkers counts, and any sort of stats plus labels like Player 1 and 2
-        """
-        pass
+        self.label = tk.Label(root, text="", width = 63, height = 2).grid(row = 1)#column = 3, row = 3)
+        if self.round ==2:
+            self.text = tk.StringVar()
+            self.text.set("Black's turn")
+            self.label = tk.Label(root, textvariable=self.text, bg = 'red', width = 40, height = 2, font = 'Arial').grid(row = 1)#column = 3, row = 3)
+        if self.round == 1:
+            self.text = tk.StringVar()
+            self.text.set("Red's turn")
+            self.label = tk.Label(root, textvariable=self.text, bg = 'red', width = 40, height = 2, font = 'Arial').grid(row = 1)#column = 3, row = 3)
+
+            #tk.Label(root,text ="Black's turn").grid(column = 10, row = 10)
     
     def build_board(self):
         """
@@ -85,7 +92,7 @@ class CheckersApp(tk.Frame):
                 cell = tk.Button(self,
                     width=50, 
                     image = self.img2, 
-                    command = lambda x=x, y=y :self.button_clicked(x, y),
+                    command = lambda x=x, y=y :self.black_clicked(x, y),
                     height=50)
     
         cell.grid(row=self.padding + y,
@@ -94,62 +101,79 @@ class CheckersApp(tk.Frame):
         
         return cell
     def grid_clicked(self, x, y):
-        print('Clicked piece %d, %d' % (x, y))
+        #print('Clicked piece %d, %d' % (x, y))
         del(self.locationlist[0])
         del(self.locationlist[0])
         self.locationlist.append(x)
         self.locationlist.append(y)
-        if self.round == 1:
-            x1 = self.piecelist[0]
-            y1 = self.piecelist[1]
-            x2 = self.locationlist[0]
-            y2 = self.locationlist[1]
-            if (y2 == y1+1 and x2==x1+1) or (y2==y1+1 and x2==x1-1):
-                while self.loop == 0:
-                    piece = self.button_list[x1][y1]
-                    location = self.button_list[x2][y2]
-                    piece.grid(row=self.padding + y2,
-                    column = self.padding + x2)
-                    location.grid(row=self.padding + y1,
-                    column=self.padding + x1)
-                    self.button_list[x1][y1] = location
-                    self.button_list[x2][y2] = piece
-                    piece['command'] = lambda x2 = x2, y2 = y2 :self.button_clicked(x2, y2)
-                    location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
-                    self.counter = 0
-                    self.round +=1
-                    self.loop +=1
+        
+        if self.red > self.black:
+            if self.round == 1: 
+                x1 = self.piecelist[0]
+                y1 = self.piecelist[1]
+                x2 = self.locationlist[0]
+                y2 = self.locationlist[1]
+                if (y2 == y1+1 and x2==x1+1) or (y2==y1+1 and x2==x1-1):
+                    while self.loop == 0:
+                        piece = self.button_list[x1][y1]
+                        location = self.button_list[x2][y2]
+                        piece.grid(row=self.padding + y2,
+                        column = self.padding + x2)
+                        location.grid(row=self.padding + y1,
+                        column=self.padding + x1)
+                        self.button_list[x1][y1] = location
+                        self.button_list[x2][y2] = piece
+                        piece['command'] = lambda x2 = x2, y2 = y2 :self.button_clicked(x2, y2)
+                        location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
+                        self.loop =1       
+                        self.round =2
 
-            
-        if self.round == 2:
-            x1 = self.piecelist[0]
-            y1 = self.piecelist[1]
-            x2 = self.locationlist[0]
-            y2 = self.locationlist[1]
-            if (y2 ==y1-1 and x2==x1-1) or (y2 ==y1-1 and x2==x1+1):
-                #self.loop = 1
-                #while self.loop == 1:
-                while self.loop == 1:
-                    piece = self.button_list[x1][y1]
-                    location = self.button_list[x2][y2]
-                    piece.grid(row=self.padding + y2,
-                    column = self.padding + x2)
-                    location.grid(row=self.padding + y1,
-                    column=self.padding + x1)
-                    self.button_list[x1][y1] = location
-                    self.button_list[x2][y2] = piece
-                    piece['command'] = lambda x2 = x2, y2 = y2 :self.button_clicked(x2, y2)
-                    location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
-                    self.counter = 0
-                    self.round -=1
-                    self.loop -=1
 
-    
+        
+        if self.red < self.black:
+            if self.round == 2:
+                x1 = self.piecelist[0]
+                y1 = self.piecelist[1]
+                x2 = self.locationlist[0]
+                y2 = self.locationlist[1]
+                if (y2 ==y1-1 and x2==x1-1) or (y2 ==y1-1 and x2==x1+1):    
+                    while self.loop == 1:
+                        piece = self.button_list[x1][y1]
+                        location = self.button_list[x2][y2]
+                        piece.grid(row=self.padding + y2,
+                        column = self.padding + x2)
+                        location.grid(row=self.padding + y1,
+                        column=self.padding + x1)
+                        self.button_list[x1][y1] = location
+                        self.button_list[x2][y2] = piece
+                        piece['command'] = lambda x2 = x2, y2 = y2 :self.black_clicked(x2, y2)
+                        location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
+                        self.loop =0
+                        self.round =1
+        
+        self.build_gui()
     def button_clicked(self, x, y):
-        print('Clicked piece %d, %d' % (x, y))
-        if self.counter == 0:
-            self.counter +=1
+        #print('Clicked piece %d, %d' % (x, y))
+        if self.round == 1:
+            self.red = 1
+            self.black = 0
+        if self.round == 2:
+            self.red = 1
+            self.black = 0
 
+        del(self.piecelist[0])
+        del(self.piecelist[0])
+        self.piecelist.append(x)
+        self.piecelist.append(y)
+
+    def black_clicked(self, x, y):
+        #print('Clicked piece %d, %d' % (x, y))
+        if self.round == 1:
+            self.black = 1 
+            self.red = 0
+        if self.round ==2:
+            self.black = 1
+            self.red = 0
         del(self.piecelist[0])
         del(self.piecelist[0])
         self.piecelist.append(x)
@@ -158,9 +182,6 @@ class CheckersApp(tk.Frame):
         pass
     def move_piece(self, x, y):
         pass
-
-
-
 root = tk.Tk()
 root.title("Checkers Application")
 
@@ -176,3 +197,4 @@ root.mainloop()
 #TURNS ARE IMPLEMENTED, MEANING RED PIECES CAN MOVE FIRST, THEN BLACK PIECES MOVE.
 #THE TURNS RESTRICT WHICH PIECES CAN MOVE DEPENDING ON WHICH TURN IT IS
 #IF A SPACE THAT THE PIECE CANNOT BE MOVED TOO IS CLICKED, THE PLAYER CAN SELECT ANOTHER SPOT TO MOVE THAT PIECE TOO
+#HOW TO SAVE A VARIABLE IN EACH LAMBDA COMMAND?!?!!
