@@ -178,10 +178,10 @@ class CheckersLogic:
             for y in range(8):
                 if (x + y) % 2 == 1:
                     if y < 3:
-                        self.board[x][y] = CheckersPiece(x, y, self.board, 'black')
+                        self.board[x][y] = CheckersPiece(x, y, self, 'black')
                         continue
                     if y > 4:
-                        self.board[x][y] = CheckersPiece(x, y, self.board, 'black')
+                        self.board[x][y] = CheckersPiece(x, y, self, 'red')
                         continue
 
                 self.board[x][y] = 0
