@@ -43,7 +43,6 @@ class CheckersPiece:
             Gets the moves that are permitted from the piece
             TODO -> if there is a player where it can move, but not a player after,
             allow "jumping" over players.
-
             X = self player
             Y = other players
             Z = allowed moves
@@ -59,15 +58,14 @@ class CheckersPiece:
         """
         # stored as an array of {x, y, destroyedPiece:{x, y}, extras: None|[more of these]}s
         possible_moves = []
-     
         x = self.x
         y = self.y
+        print("this is running")
         # If its black, it moves from y = 0, to y = 8
         # If its black, it moves from y = 8 to y = 0
         direction = -1
         if self.team == 'black':
             direction = 1
-
         # if there is no player on right, its direction
         cell = self.game.get_cell(x + 1, y + direction, True)
         if cell == 0:
@@ -75,7 +73,7 @@ class CheckersPiece:
                 "x": x + 1,
                 "y": y + direction,
                 "destroyedPiece": -1,
-                "extras": [] # this will be used for extra jumps
+                "extras1": [] # this will be used for extra jumps
             })
         elif cell != -1 and cell != self.team and self.game.get_cell(x + 2, y + direction * 2, True) == 0: # if not 0, then it must be an object
             possible_moves.append({
@@ -85,7 +83,7 @@ class CheckersPiece:
                     "x": x + 1,
                     "y": y + direction
                 },
-                "extras": [] # this will be used for extra jumps
+                "extras2": [] # this will be used for extra jumps
             })
 
 
@@ -97,7 +95,7 @@ class CheckersPiece:
                 "x": x - 1,
                 "y": y + direction,
                 "destroyedPiece": -1,
-                "extras": []
+                "extras3": []
             })
         elif cell != -1 and cell != self.team and self.game.get_cell(x - 2, y + direction * 2, True) == 0: # if not 0, then it must be an object
             possible_moves.append({
@@ -107,7 +105,7 @@ class CheckersPiece:
                     "x": x - 1,
                     "y": y + direction
                 },
-                "extras": [] # this will be used for extra jumps
+                "extras4": [] # this will be used for extra jumps
             })
 
         if self.is_king:
@@ -118,7 +116,7 @@ class CheckersPiece:
                     "x": x + 1,
                     "y": y - direction,
                     "destroyedPiece": -1,
-                    "extras": []
+                    "extras5": []
                 })
             elif cell != -1 and cell != self.team and self.game.get_cell(x + 2, y - direction * 2, True) == 0: # if not 0, then it must be an object
                 possible_moves.append({
@@ -128,7 +126,7 @@ class CheckersPiece:
                         "x": x + 1,
                         "y": y - direction
                     },
-                    "extras": [] # this will be used for extra jumps
+                    "extras6": [] # this will be used for extra jumps
                 })
 
             # if there is no player on left,  opposite its direction, and is a kings
@@ -166,25 +164,29 @@ class CheckersLogic:
         self.board = []
         for x in range(8):
             arr = []
-            for y in range(8):
-                arr.append(0)
-
+            for y in range(8): 
+                ccell = (x,y)
+                arr.append(ccell)
             self.board.append(arr)
-
         self.setup()
+        print("Step 1 run")
 
     def setup(self):
+        print("yup its running")
         for x in range(8):
             for y in range(8):
                 if (x + y) % 2 == 1:
                     if y < 3:
-                        self.board[x][y] = CheckersPiece(x, y, self.board, 'black')
+                        self.board[x][y] = CheckersPiece(x, y, self, 'black')
                         continue
                     if y > 4:
-                        self.board[x][y] = CheckersPiece(x, y, self.board, 'black')
+                        self.board[x][y] = CheckersPiece(x, y, self, 'red')
                         continue
-
+       
                 self.board[x][y] = 0
+                #del(self.board[x])
+                #del(self.board[y]) 
+        #print(self.board)
     def get_cell(self, x, y, by_team=False):
         """
             Get a cell (x, y) on self board
@@ -192,9 +194,21 @@ class CheckersLogic:
         if x < 8 and y < 8:
             if not by_team:
                 return self.board[x][y]
-
             cell = self.board[x][y]
             if cell == 0:
                 return cell
             return cell.team
         return -1
+    def color_check(self,x,y):
+        if x < 8 and y < 8:         
+            self.x = x
+            self.y = y
+            cell = self.board[x][y]
+            return cell.team
+    def first_get_cell(self,x,y):
+        if x < 8 and y < 8:            
+            self.x = x
+            self.y = y
+            cell = 0
+            cell = self.board[x][y]
+            return cell
