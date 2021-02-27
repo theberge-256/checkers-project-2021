@@ -60,13 +60,16 @@ class CheckersPiece:
         possible_moves = []
         x = self.x
         y = self.y
-        print("this is running")
         # If its black, it moves from y = 0, to y = 8
         # If its black, it moves from y = 8 to y = 0
         direction = -1
         if self.team == 'black':
             direction = 1
         # if there is no player on right, its direction
+        #if self.counter == 2:
+                #del(possible_moves[0])
+                #del(possible_moves[0])
+                #self.counter = 0
         cell = self.game.get_cell(x + 1, y + direction, True)
         if cell == 0:
             possible_moves.append({
@@ -169,10 +172,8 @@ class CheckersLogic:
                 arr.append(ccell)
             self.board.append(arr)
         self.setup()
-        print("Step 1 run")
 
     def setup(self):
-        print("yup its running")
         for x in range(8):
             for y in range(8):
                 if (x + y) % 2 == 1:
@@ -186,7 +187,6 @@ class CheckersLogic:
                 self.board[x][y] = 0
                 #del(self.board[x])
                 #del(self.board[y]) 
-        #print(self.board)
     def get_cell(self, x, y, by_team=False):
         """
             Get a cell (x, y) on self board

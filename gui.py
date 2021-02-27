@@ -23,6 +23,7 @@ class CheckersApp(tk.Frame):
         self.black = 0
         self.render()
         self.logic.setup()
+        self.move = 0
         #self.check_piece()
         
 
@@ -32,16 +33,16 @@ class CheckersApp(tk.Frame):
         self.build_gui()
     def build_gui(self):
         #This label keeps track of which color's turn it is.
-        self.label1 = tk.Label(self.master, text="", width = 63, height = 2).grid(row = 1)
+        self.round_label = tk.Label(self.master, text="", width = 63, height = 2).grid(row = 1)
         if self.round ==2:
             self.text = tk.StringVar()
             self.text.set("Black's turn")
-            self.label1 = tk.Label(self.master, textvariable=self.text, bg = 'red', width = 40, height = 2, font = 'Arial').grid(row = 1)
+            self.round_label = tk.Label(self.master, textvariable=self.text, bg = 'red', width = 40, height = 2, font = 'Arial').grid(row = 1)
         if self.round == 1:
             self.text = tk.StringVar()
             self.text.set("Red's turn")
-            self.label1 = tk.Label(self.master, textvariable=self.text, bg = 'red', width = 40, height = 2, font = 'Arial').grid(row = 1)
-
+            self.round_label = tk.Label(self.master, textvariable=self.text, bg = 'red', width = 40, height = 2, font = 'Arial').grid(row = 1)
+        self.move_label = tk.Label(self.master, text="", width = 15, height = 2).grid(row = 1, column = 2)
 
     
     def build_board(self):
@@ -60,18 +61,18 @@ class CheckersApp(tk.Frame):
         return
 
     def build_cell1(self, x, y):
-        color = 'black'
+        #color = 'black'
         cell1 = tk.Button(self,
-                    highlightbackground=color,
-                    bg=color,
+                    highlightbackground='black',
+                    bg='black',
                     #command = lambda x=x, y=y :self.check_grid(x,y),
                     width=6,
                     height=3)
         if (x + y) % 2 == 1:
-            color = 'red'
+            #color = 'red'
             cell1 = tk.Button(self,
-                    highlightbackground=color,
-                    bg=color,
+                    highlightbackground='red',
+                    bg='red',
                     width=6,
                     command = lambda x=x, y=y :self.check_grid(x, y),
                     height=3)
@@ -87,7 +88,8 @@ class CheckersApp(tk.Frame):
         if (x + y) % 2 == 1:
             if y < 3: 
                 cell1 = tk.Button(self,
-                    width=50, 
+                    width=50,
+                    bg = 'gray1', 
                     image = self.img2, 
                     command = lambda x=x, y=y :self.check_piece(x,y),
                     height=50)
@@ -95,6 +97,7 @@ class CheckersApp(tk.Frame):
             elif y > 4:
                 cell1 = tk.Button(self,
                     width=50, 
+                    bg = 'red2',
                     image = self.img, 
                     command = lambda x=x, y=y :self.check_piece(x,y),
                     height=50)
@@ -110,13 +113,35 @@ class CheckersApp(tk.Frame):
         self.locationlist.append(x)
         self.locationlist.append(y)
         print("grid_clicked")
+
+
         if self.red > self.black:
             if self.round == 1: 
                 x1 = self.piecelist[0]
                 y1 = self.piecelist[1]
                 x2 = self.locationlist[0]
                 y2 = self.locationlist[1]
-                if (y2 ==y1-1 and x2==x1-1) or (y2 ==y1-1 and x2==x1+1):  
+                a = x1-1
+                b = y1-1
+                c = x1+1
+                if x1 != 0:
+                    piece = self.button_list[a][b] #in charge of left-way movement 
+                    if piece.cget('bg') == 'gray1':
+                        if (y2 ==y1-2 and x2==x1-2):
+                            self.move = 1
+                    if piece.cget('bg') == 'red' or 'black':
+                        if (y2 ==y1-1 and x2==x1-1):
+                            self.move = 1
+                if x1 !=7:
+                    piece2 = self.button_list[c][b] #in charge of right-way movement
+                    if piece2.cget('bg') == 'gray1':
+                        if (y2 ==y1-2 and x2==x1+2):
+                            self.move = 1
+                    if piece2.cget('bg') == 'red' or 'black':
+                        if (y2 ==y1-1 and x2==x1+1):
+                            self.move = 1
+
+                if self.move == 1:
                     while self.loop == 0:
                         piece = self.button_list[x1][y1]
                         location = self.button_list[x2][y2]
@@ -130,8 +155,66 @@ class CheckersApp(tk.Frame):
                         location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
                         self.loop =1       
                         self.round =2
+                        self.move = 0
                         #print(self.game)
                         #print(CheckersPiece.team)
+                #if self.move == 2:
+                    #while self.loop == 0:
+                        #if x1 != 0:
+                           # if (y2 ==y1-2 and x2==x1-2):
+                               # self.button_list[a][b] = [x2][y2]
+                               # piece2 = self.button_list[a][b]
+                               # location = self.button_list[x2][y2]
+                                #cell1 = self.build_cell1(a,b)
+                                #tk.Button.destroy(a,b)
+                                #cell1 =tk.Button(self,
+                                            #highlightbackground='red',
+                                            #bg='red',
+                                            #width=6,
+                                            #command = lambda a=a, b=b :self.grid_clicked(a, b),
+                                            #height=3).grid(row = self.padding + b, column = self.padding + a)
+                                
+                               # location.grid(row=self.padding + y2,
+                               # column=self.padding + x2)
+                                #self.button_list[a][b] = location
+                                #self.button_list[x2][y2] = location
+                               # location['command'] = lambda x2 = x2, y2 = y2 :self.grid_clicked(x2, y2)
+                        
+                       # if x1 != 7:
+                            #if (y2 ==y1-2 and x2==x1+2):
+                               # self.button_list[c][b] = self.button_list[x2][y2]
+                                #piece2 = self.button_list[c][b]
+                              #  location = self.button_list[x2][y2]
+                                #cell1 = self.build_cell1(c,b)
+                                #tk.Button.destroy(c,b)
+                                #cell1 = tk.Button(self,
+                                           # highlightbackground='red',
+                                           # bg='red',
+                                            #width=6,
+                                           # command = lambda c=c, b=b :self.grid_clicked(c, b),
+                                           # height=3).grid(row = self.padding + b, column = self.padding + c)
+                                
+                                #location.grid(row=self.padding + y2,
+                               # column=self.padding + x2)
+                                #self.button_list[c][b] = location
+                               # self.button_list[x2][y2] = location
+                               # location['command'] = lambda x2 = x2, y2 = y2 :self.grid_clicked(x2, y2)
+                                
+
+                      #  piece = self.button_list[x1][y1]
+                      #  location = self.button_list[x2][y2]
+                      #  piece.grid(row=self.padding + y2,
+                       # column = self.padding + x2)
+                      #  location.grid(row=self.padding + y1,
+                      #  column=self.padding + x1)
+                      #  self.button_list[x1][y1] = location
+                      #  self.button_list[x2][y2] = piece
+                      #  piece['command'] = lambda x2 = x2, y2 = y2 :self.button_clicked(x2, y2)
+                      #  location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
+                      #  self.loop =1       
+                      #  self.round =2
+                     #   self.move = 0
+                        
 
         if self.red < self.black:
             if self.round == 2:
@@ -139,7 +222,29 @@ class CheckersApp(tk.Frame):
                 y1 = self.piecelist[1]
                 x2 = self.locationlist[0]
                 y2 = self.locationlist[1]
-                if (y2 == y1+1 and x2==x1+1) or (y2==y1+1 and x2==x1-1):  
+                a = x1+1
+                b = y1+1
+                c = x1-1
+                if x1 != 7:
+                    piece = self.button_list[a][b] #in charge of right-way movement
+                    if piece.cget('bg') == 'red2':
+                        if (y2 == y1+2 and x2==x1+2):
+                            self.move = 1
+                    if piece.cget('bg') == 'red' or 'black':
+                        if (y2 == y1+1 and x2==x1+1):
+                            self.move = 1
+                if x1 != 0:
+                    piece2 = self.button_list[c][b] #in charge of left-way movement
+                    if piece2.cget('bg') == 'red2':
+                        if (y2==y1+2 and x2==x1-2):
+                            self.move = 1
+                    if piece2.cget('bg') == 'red' or 'black':
+                        if (y2==y1+1 and x2==x1-1):
+                            self.move = 1
+
+
+                
+                if self.move == 1:
                     while self.loop == 1:
                         piece = self.button_list[x1][y1]
                         location = self.button_list[x2][y2]
@@ -153,7 +258,10 @@ class CheckersApp(tk.Frame):
                         location['command'] = lambda x1 = x1, y1 = y1 :self.grid_clicked(x1, y1)
                         self.loop =0
                         self.round =1
-            
+                        self.move = 0
+
+               
+        #self.update_board
         self.build_gui()
     def button_clicked(self, x, y):
         #This determines certain variables when it's red's turn
@@ -183,7 +291,9 @@ class CheckersApp(tk.Frame):
         self.piecelist.append(y)
     
     def update_board(self,x,y):
-        self.logic.setup()
+        #frame.destroy()
+        #self.render()
+        pass
     
     def check_piece(self, x, y):
         print(x,y)
@@ -209,20 +319,22 @@ class CheckersApp(tk.Frame):
         self.piecelist.append(y)
         cell = self.logic.first_get_cell(x,y)
         moves = cell.allowed_moves()
-        print(moves)
+        #print(moves)
         #How to use apply_moves
         #moves[x][y].apply_move()
         #print(moves.apply_move())
-        self.update_board
+        #self.update_board
         #self.button_clicked(x,y)
 
     def check_grid(self,x,y):
         print(x,y)
         #print(self.logic.get_cell(x, y, False))
        
-        self.update_board
+        #self.update_board
         self.grid_clicked(x,y)
-        
+    #def destroy(self,x,y):
+        pass
+        #tk.Button.destroy(x,y)
 #root = tk.Tk()
 #root.title("Checkers Application")
 #app = CheckersApp(root, False)
