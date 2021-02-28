@@ -38,3 +38,6 @@ root.title("Checkers Manager")
 logic = CheckersLogic()
 app = CheckersApp(root, logic)
 root.mainloop()
+#def main():
+    #app.render()
+
