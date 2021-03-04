@@ -202,34 +202,34 @@ class CheckersApp(tk.Frame):
                 if current_location['bg'] == 'yellow':
                     
                     if x1 < 6 and y1 <6:
-                        piece1 = self.button_list[a][e] 
+                        piece1 = self.button_list[c][e] 
                         if piece1.cget('bg') == 'gray1' or piece1.cget('bg') == 'yellow1':
                             if (y2 == y1+2 and x2==x1+2):
                                 self.move = 2
                     if x1 != 7 and y1 != 7:
-                        piece1 = self.button_list[a][e]     
+                        piece1 = self.button_list[c][e]     
                         if piece1.cget('bg') == 'red' or 'black':
                             if (y2 == y1+1 and x2==x1+1):
                                 self.move = 1
                     if x1 > 1 and y1 <6:
-                        piece2 = self.button_list[c][e]
+                        piece2 = self.button_list[a][e]
                         if piece2.cget('bg') == 'gray1' or piece2.cget('bg') == 'yellow1':
                             if (y2==y1+2 and x2==x1-2):
                                 self.move = 2
                     if x1 != 0 and y1 != 7:
-                        piece2 = self.button_list[c][e]
+                        piece2 = self.button_list[a][e]
                         if piece2.cget('bg') == 'red' or 'black':
                                 if (y2==y1+1 and x2==x1-1):
                                     self.move = 1
                         
 
                 if self.double_counter == 1 or current_location['bg'] == 'yellow':
-                    if x1 != 0:
+                    if x1 > 1 and y1 > 1:
                         piece = self.button_list[a][b]
                         if piece.cget('bg') == 'gray1' or piece.cget('bg') == 'yellow1':
                             if (y2 ==y1-2 and x2==x1-2):
                                 self.move = 2
-                    if x1 !=7:
+                    if x1 < 7 and y1 > 1:
                         piece = self.button_list[c][b]
                         if piece.cget('bg') == 'gray1'or piece.cget('bg') == 'yellow1':
                             if (y2 ==y1-2 and x2==x1+2):
@@ -239,7 +239,7 @@ class CheckersApp(tk.Frame):
                         if piece.cget('bg') == 'gray1' or piece.cget('bg') == 'yellow1':
                             if (y2 ==y1+2 and x2==x1+2):
                                 self.move =2
-                    if x1 != 0:
+                    if x1 > 1 and y1 < 6:
                         piece = self.button_list[a][e]
                         if piece.cget('bg') == 'gray1' or piece.cget('bg') == 'yellow1':
                             if (y2==y1+2 and x2==x1-2):
