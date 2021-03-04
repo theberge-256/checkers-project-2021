@@ -34,7 +34,6 @@ class CheckersManager(tk.Frame):
 #print(Logic.board)
 root = tk.Tk()
 root.title("Checkers Manager")
-
 logic = CheckersLogic()
 app = CheckersApp(root, logic)
 root.mainloop()

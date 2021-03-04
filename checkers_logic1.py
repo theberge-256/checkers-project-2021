@@ -212,3 +212,4 @@ class CheckersLogic:
             cell = 0
             cell = self.board[x][y]
             return cell
+    
